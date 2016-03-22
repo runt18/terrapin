@@ -22,7 +22,7 @@ import subprocess
 
 # Find the process ID for a java process.
 def find_process_id(java_class, full_java_class):
-  ps_command = "ps aux | grep %s" % java_class 
+  ps_command = "ps aux | grep {0!s}".format(java_class) 
   proc = subprocess.Popen([ps_command], stdout=subprocess.PIPE, shell=True)
   (out, err) = proc.communicate()
   lines = out.split('\n')
@@ -34,7 +34,7 @@ def find_process_id(java_class, full_java_class):
 
 # Find the start and end core for a process.
 def get_cores(pid_str):
-  taskset_command = "taskset -cp %s" % pid_str
+  taskset_command = "taskset -cp {0!s}".format(pid_str)
   proc = subprocess.Popen([taskset_command], stdout=subprocess.PIPE, shell=True)
   (out, err) = proc.communicate()
   cores = out.split()[-1]
@@ -46,8 +46,8 @@ def get_cores(pid_str):
 
 # Set the start and end core for a process.
 def set_cores(pid_str, start_core, end_core):
-  taskset_command = "taskset -acp %d-%d %s" % (start_core, end_core, pid_str)
-  print "Running %s" % taskset_command
+  taskset_command = "taskset -acp {0:d}-{1:d} {2!s}".format(start_core, end_core, pid_str)
+  print "Running {0!s}".format(taskset_command)
   proc = subprocess.Popen([taskset_command], stdout=subprocess.PIPE, shell=True)
   (out, err) = proc.communicate()
 
